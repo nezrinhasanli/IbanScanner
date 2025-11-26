@@ -82,25 +82,25 @@ class MainActivity : ComponentActivity() {
         resultLauncher.launch(configuration)
     }
 
-    companion object{
-    fun isValidIban(receiverIban: String): Boolean {
-        return receiverIban.length > 7 &&
-                receiverIban.startsWith("AZ") &&
-                !receiverIban.drop(4).startsWith("AZEN") &&
-                checkMod97(receiverIban)
-    }
+    companion object {
+        fun isValidIban(receiverIban: String): Boolean {
+            return receiverIban.length > 7 &&
+                    receiverIban.startsWith("AZ") &&
+                    !receiverIban.drop(4).startsWith("AZEN") &&
+                    checkMod97(receiverIban)
+        }
 
-    fun checkMod97(receiverIban: String): Boolean {
-        val reformatted = receiverIban.removeRange(0..3) + receiverIban.take(4)
-        val mod97Format = reformatted.map {
-            if (it.isLetter()) (it.code - 55).toString() else it.toString()
-        }.joinToString("")
+        fun checkMod97(receiverIban: String): Boolean {
+            val reformatted = receiverIban.removeRange(0..3) + receiverIban.take(4)
+            val mod97Format = reformatted.map {
+                if (it.isLetter()) (it.code - 55).toString() else it.toString()
+            }.joinToString("")
 
-        val mod97 = mod97Format.toBigInteger().mod(BigInteger.valueOf(97L))
-        return mod97 == BigInteger.ONE
+            val mod97 = mod97Format.toBigInteger().mod(BigInteger.valueOf(97L))
+            return mod97 == BigInteger.ONE
+        }
     }
 }
-    }
 
 @Composable
 fun SerialScannerScreen(onScanClick: () -> Unit, enabled: Boolean = true) {
